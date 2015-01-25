@@ -69,5 +69,5 @@ def tweet_reply_kisses():
 if __name__ == '__main__':
   while True:
     if tweet_reply_kisses() is None:
-      sleep(600)
-    sleep(90)
+      sleep(900)
+    sleep(65)
