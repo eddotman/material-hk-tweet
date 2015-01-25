@@ -36,8 +36,8 @@ def str_kisses_per_mol(chemical):
     return "I'll give you " + str(abs(num_kisses)) + " Hershey's Kisses from forming 1 mol of " + chemical + "."
 
 def tweet_reply_kisses():
-  auth = tp.OAuthHandler("API", "API")
-  auth.set_access_token("API", "API")
+  auth = tp.OAuthHandler(environ.get("TWIT_KEY"), environ.get("TWIT_SEC_KEY"))
+  auth.set_access_token(environ.get("TWIT_ACC_KEY"), environ.get("TWIT_ACC_SEC_KEY"))
   api = tp.API(auth)
 
   public_tweets = api.mentions_timeline(count=1)
@@ -46,7 +46,8 @@ def tweet_reply_kisses():
       reply_to_username = str(tweet.user.screen_name)
       chemical = str(tweet.text.encode('utf-8').replace('@mat_e_tweeter', '').strip(' '))
 
-  api.update_status("@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id)
+  #api.update_status("@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id)
+  print "@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id
 
 
 tweet_reply_kisses()
