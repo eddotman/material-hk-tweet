@@ -59,7 +59,7 @@ def tweet_reply_kisses():
       reply_to_username = str(tweet.user.screen_name)
       chemical = str(tweet.text.encode('utf-8').replace('@mat_e_tweeter', '').strip(' '))
 
-      #api.update_status("@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id)
+      api.update_status("@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id)
       print "@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id
 
   with open('latest_tweet', 'wb') as f:
