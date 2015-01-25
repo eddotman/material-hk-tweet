@@ -45,8 +45,12 @@ def tweet_reply_kisses():
     latest_tweet_id = int(f.read())
     print "Old latest tweet: " + str(latest_tweet_id)
 
-  public_tweets = api.mentions_timeline(count=20)
-  new_latest_tweet_id = public_tweets[0].id
+  try:
+    public_tweets = api.mentions_timeline(count=20)
+    new_latest_tweet_id = public_tweets[0].id
+  except tp.TweepError:
+    print "API limit exceeded!"
+    return None
 
   for tweet in public_tweets:
     if tweet.id > latest_tweet_id:
@@ -63,7 +67,7 @@ def tweet_reply_kisses():
     f.write(str(new_latest_tweet_id))
 
 if __name__ == '__main__':
-  tweet_reply_kisses()
- # while True:
- #   tweet_reply_kisses()
- #   sleep(60)
+  while True:
+    if tweet_reply_kisses() is None:
+      sleep(600)
+    sleep(90)
