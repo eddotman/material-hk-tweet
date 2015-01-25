@@ -1,5 +1,6 @@
 from pymatgen import (MPRester, Composition)
 from os import environ
+from time import sleep
 import tweepy as tp
 
 def str_kisses_per_mol(chemical):
@@ -40,14 +41,29 @@ def tweet_reply_kisses():
   auth.set_access_token(environ.get("TWIT_ACC_KEY"), environ.get("TWIT_ACC_SEC_KEY"))
   api = tp.API(auth)
 
-  public_tweets = api.mentions_timeline(count=1)
+  with open('latest_tweet', 'r') as f:
+    latest_tweet_id = int(f.read())
+    print "Old latest tweet: " + str(latest_tweet_id)
+
+  public_tweets = api.mentions_timeline(count=20)
+  new_latest_tweet_id = public_tweets[0].id
+
   for tweet in public_tweets:
+    if tweet.id > latest_tweet_id:
+      print "Current tweet id: " + str(tweet.id)
       reply_to_status_id = str(tweet.id)
       reply_to_username = str(tweet.user.screen_name)
       chemical = str(tweet.text.encode('utf-8').replace('@mat_e_tweeter', '').strip(' '))
 
-  #api.update_status("@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id)
-  print "@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id
+      #api.update_status("@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id)
+      print "@" + reply_to_username + " " + str_kisses_per_mol(chemical), reply_to_status_id
 
+  with open('latest_tweet', 'wb') as f:
+    print "New latest tweet: " + str(new_latest_tweet_id)
+    f.write(str(new_latest_tweet_id))
 
-tweet_reply_kisses()
+if __name__ == '__main__':
+  tweet_reply_kisses()
+ # while True:
+ #   tweet_reply_kisses()
+ #   sleep(60)
